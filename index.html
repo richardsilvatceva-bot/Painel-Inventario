@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal do Planejamento | CEVA</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <style>
+        /* Estilos Base e Fundo Escuro Moderno */
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        body { 
+            background-color: #0b0f19; 
+            color: #ffffff; 
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-image: radial-gradient(circle at top right, #1a1b3a 0%, #0b0f19 50%);
+        }
+
+        /* Cabeçalho */
+        header { padding: 40px 50px; display: flex; justify-content: space-between; align-items: flex-start; }
+        .header-text h3 { color: #ef4444; font-size: 14px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 5px; font-weight: 600; }
+        .header-text h1 { font-size: 42px; font-weight: 800; line-height: 1.1; margin-bottom: 10px; }
+        .header-text h1 span { color: #ef4444; }
+        .header-text p { color: #94a3b8; font-size: 16px; }
+        .logo { font-size: 24px; font-weight: bold; font-style: italic; display: flex; align-items: center; gap: 5px;}
+        .logo span { color: #ef4444; }
+
+        /* Grid de Cartões */
+        .cards-container { 
+            padding: 20px 50px; 
+            display: flex; 
+            gap: 25px; 
+            flex-wrap: wrap; 
+            flex: 1;
+        }
+
+        /* O Cartão (Link) */
+        .card {
+            background-color: #111827;
+            border-radius: 16px;
+            padding: 30px;
+            width: calc(25% - 20px);
+            min-width: 250px;
+            text-decoration: none;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+        }
+
+        /* Bordas Coloridas */
+        .card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; }
+        .card.planejamento::before { background: linear-gradient(90deg, #3b82f6, #8b5cf6); }
+        .card.contagem::before { background: linear-gradient(90deg, #ef4444, #f97316); }
+
+        .card-icon {
+            width: 48px; height: 48px; border-radius: 12px; display: flex; justify-content: center; align-items: center; margin-bottom: 20px;
+        }
+        .card.planejamento .card-icon { background: rgba(59, 130, 246, 0.1); color: #3b82f6; }
+        .card.contagem .card-icon { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+
+        .card h2 { font-size: 20px; margin-bottom: 10px; font-weight: 600; }
+        .card p { color: #94a3b8; font-size: 14px; line-height: 1.5; flex: 1; }
+
+        .card-arrow {
+            align-self: flex-end; width: 36px; height: 36px; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin-top: 20px; border: 1px solid rgba(255,255,255,0.1); transition: 0.2s;
+        }
+        .card:hover .card-arrow { background: rgba(255,255,255,0.1); }
+
+        /* Rodapé de Informações */
+        footer { padding: 20px 50px; border-top: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; background: rgba(0,0,0,0.2); }
+        .footer-item { display: flex; align-items: center; gap: 8px; color: #64748b; font-size: 13px; font-weight: 500;}
+
+        /* Responsividade */
+        @media (max-width: 1024px) { .card { width: calc(50% - 15px); } }
+        @media (max-width: 768px) { 
+            header { flex-direction: column; gap: 20px; padding: 30px 20px; }
+            .cards-container { padding: 10px 20px; }
+            .card { width: 100%; }
+            footer { display: none; } 
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-text">
+            <h3>- Bem-vindo ao -</h3>
+            <h1>PORTAL DO<br><span>PLANEJAMENTO</span></h1>
+            <p>Soluções inteligentes para uma logística mais eficiente</p>
+        </div>
+        <div class="logo">
+            ceva <span>LOGISTICS</span>
+        </div>
+    </header>
+
+    <div class="cards-container">
+        
+        <!-- Cartão 1: Redireciona para o Streamlit (Python) -->
+        <a href="https://nvnjfcvjdmwwryttyp6q65.streamlit.app/" target="_blank" class="card planejamento">
+            <div class="card-icon">
+                <span class="material-icons-outlined">insert_chart_outlined</span>
+            </div>
+            <h2>Análise e<br>Planejamento</h2>
+            <p>Acesse as ferramentas de análise avançada, dashboards operacionais e validações construídas em Python.</p>
+            <div class="card-arrow"><span class="material-icons-outlined">arrow_forward</span></div>
+        </a>
+
+        <!-- Cartão 2: Redireciona para o Flow (GitHub Pages) -->
+        <a href="https://richardsilvatceva-bot.github.io/Flow/" target="_blank" class="card contagem">
+            <div class="card-icon">
+                <span class="material-icons-outlined">inventory_2</span>
+            </div>
+            <h2>Flow<br>Inventário</h2>
+            <p>Plataforma para gerenciamento de contagens físicas, execução de conferências e controle de itens divergentes.</p>
+            <div class="card-arrow"><span class="material-icons-outlined">arrow_forward</span></div>
+        </a>
+
+    </div>
+
+    <footer>
+        <div class="footer-item"><span class="material-icons-outlined" style="font-size:16px;">verified_user</span> Visão de Ponta a Ponta</div>
+        <div class="footer-item"><span class="material-icons-outlined" style="font-size:16px;">security</span> Segurança de dados</div>
+        <div class="footer-item"><span class="material-icons-outlined" style="font-size:16px;">schedule</span> Informações em tempo real</div>
+        <div class="footer-item"><span class="material-icons-outlined" style="font-size:16px;">groups</span> Equipes em sincronia</div>
+    </footer>
+
+</body>
+</html>
