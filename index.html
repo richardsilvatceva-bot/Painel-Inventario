@@ -3,152 +3,231 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel Inventário | CEVA</title>
+    <title>Sistema de Inventário | CEVA</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
     <style>
-        /* Estilos Base */
+        /* RESET E FONTES */
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-        
-        body { 
-            background-color: #0b0f19; 
-            color: #ffffff; 
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            
-            /* A MÁGICA DO FUNDO FERRARI COM CAMADA ESCURA */
-            /* Ele cria um degradê escuro na esquerda para o texto ficar legível, e mostra a imagem na direita */
-            background-image: linear-gradient(90deg, rgba(11, 15, 25, 0.95) 0%, rgba(11, 15, 25, 0.8) 50%, rgba(11, 15, 25, 0.4) 100%), url('fundo-ferrari.jpg');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-        }
+        body { display: flex; height: 100vh; background-color: #f5f7f9; overflow: hidden; }
 
-        /* Cabeçalho */
-        header { padding: 50px 60px; display: flex; justify-content: space-between; align-items: flex-start; }
-        .header-text h3 { color: #ef4444; font-size: 14px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 5px; font-weight: 700; }
-        .header-text h1 { font-size: 46px; font-weight: 900; line-height: 1.1; margin-bottom: 12px; letter-spacing: -1px; }
-        .header-text h1 span { color: #ef4444; }
-        .header-text p { color: #94a3b8; font-size: 16px; max-width: 500px; line-height: 1.5; }
-        
-        /* Logo da CEVA */
-        .logo-container img {
-            height: 45px; /* Tamanho ajustável do logo */
-            object-fit: contain;
-        }
-
-        /* Grid de Cartões */
-        .cards-container { 
-            padding: 10px 60px 40px; 
-            display: flex; 
-            gap: 25px; 
-            flex-wrap: wrap; 
-            flex: 1;
-        }
-
-        /* O Cartão (Link) */
-        .card {
-            background-color: rgba(17, 24, 39, 0.7);
-            backdrop-filter: blur(10px);
-            border-radius: 12px;
-            padding: 30px;
-            width: calc(30% - 20px);
-            min-width: 280px;
-            text-decoration: none;
+        /* --- LADO ESQUERDO (AZUL) --- */
+        .left-panel {
+            width: 45%;
+            background-color: #001a40; /* Azul escuro corporativo */
             color: white;
+            padding: 60px;
+            position: relative;
             display: flex;
             flex-direction: column;
-            position: relative;
-            overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s;
-            border: 1px solid rgba(255,255,255,0.05);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            justify-content: center;
+            /* O recorte diagonal do lado direito */
+            clip-path: polygon(0 0, 100% 0, 85% 100%, 0% 100%);
+            z-index: 2;
         }
 
-        .card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-            background-color: rgba(17, 24, 39, 0.9);
+        /* Formas Geométricas Vermelhas (Feitas com CSS) */
+        .red-shape-bottom {
+            position: absolute;
+            bottom: -50px;
+            right: -50px;
+            width: 300px;
+            height: 300px;
+            background-color: #e60000;
+            border-radius: 60px;
+            transform: rotate(45deg);
+            z-index: -1;
+        }
+        .red-shape-top {
+            position: absolute;
+            top: -100px;
+            right: 10%;
+            width: 150px;
+            height: 150px;
+            background-color: #e60000;
+            border-radius: 30px;
+            transform: rotate(45deg);
+            z-index: -1;
         }
 
-        /* Bordas Coloridas no Topo */
-        .card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; }
-        .card.planejamento::before { background: linear-gradient(90deg, #3b82f6, #8b5cf6); }
-        .card.contagem::before { background: linear-gradient(90deg, #ef4444, #f97316); }
+        /* Logo CEVA em Texto */
+        .logo { margin-bottom: 60px; display: inline-flex; flex-direction: column; }
+        .logo-main { font-size: 42px; font-weight: 900; letter-spacing: -2px; line-height: 1; }
+        .logo-main .red { color: #e60000; }
+        .logo-sub { font-size: 11px; font-weight: 700; letter-spacing: 3px; color: white; margin-left: 2px; margin-top: 2px; }
 
-        .card-icon {
-            width: 48px; height: 48px; border-radius: 10px; display: flex; justify-content: center; align-items: center; margin-bottom: 20px;
+        /* Títulos */
+        .hero-title { font-size: 48px; font-weight: 800; line-height: 1.1; margin-bottom: 15px; }
+        .hero-title .highlight { color: #e60000; }
+        .hero-subtitle { font-size: 16px; color: #94a3b8; margin-bottom: 50px; max-width: 80%; line-height: 1.5; }
+
+        /* Lista de Benefícios */
+        .features-list { display: flex; flex-direction: column; gap: 25px; }
+        .feature-item { display: flex; align-items: flex-start; gap: 15px; }
+        .feature-icon { 
+            width: 42px; height: 42px; border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; display: flex; justify-content: center; align-items: center; flex-shrink: 0; color: #cbd5e1;
         }
-        .card.planejamento .card-icon { background: rgba(59, 130, 246, 0.15); color: #3b82f6; }
-        .card.contagem .card-icon { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
+        .feature-text h4 { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+        .feature-text p { font-size: 13px; color: #94a3b8; line-height: 1.4; }
 
-        .card h2 { font-size: 22px; margin-bottom: 12px; font-weight: 700; letter-spacing: -0.5px; }
-        .card p { color: #94a3b8; font-size: 14px; line-height: 1.6; flex: 1; }
-
-        .card-arrow {
-            align-self: flex-end; width: 36px; height: 36px; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin-top: 25px; border: 1px solid rgba(255,255,255,0.1); transition: 0.2s; color: #cbd5e1;
+        /* --- LADO DIREITO (BRANCO) --- */
+        .right-panel {
+            width: 55%;
+            background-color: #f5f7f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            right: 0;
+            top: 0;
+            height: 100vh;
+            z-index: 1;
         }
-        .card:hover .card-arrow { background: rgba(255,255,255,0.1); color: white; }
 
-        /* Rodapé de Informações */
-        footer { padding: 20px 60px; border-top: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: flex-start; gap: 40px; background: rgba(0,0,0,0.4); backdrop-filter: blur(5px); }
-        .footer-item { display: flex; align-items: center; gap: 8px; color: #64748b; font-size: 13px; font-weight: 500;}
+        /* O Cartão Central */
+        .login-card {
+            background-color: white;
+            border-radius: 20px;
+            padding: 50px;
+            width: 100%;
+            max-width: 550px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.05);
+            text-align: center;
+            margin-left: 10%; /* Compensar o recorte diagonal */
+        }
 
-        /* Responsividade */
-        @media (max-width: 1024px) { .card { width: calc(50% - 15px); } }
-        @media (max-width: 768px) { 
-            header { flex-direction: column; gap: 30px; padding: 40px 25px 20px; }
-            .cards-container { padding: 10px 25px; }
-            .card { width: 100%; }
-            footer { display: none; } 
-            body { background-image: linear-gradient(to bottom, rgba(11, 15, 25, 0.95), rgba(11, 15, 25, 0.9)), url('fundo-ferrari.jpg'); }
+        .card-top-icon { width: 60px; height: 60px; background: rgba(0, 26, 64, 0.05); color: #001a40; border-radius: 50%; display: inline-flex; justify-content: center; align-items: center; margin-bottom: 20px; }
+        .card-top-icon .material-icons-outlined { font-size: 30px; }
+        
+        .login-card h2 { font-size: 24px; color: #0f172a; margin-bottom: 10px; font-weight: 700; }
+        .divider { width: 30px; height: 3px; background-color: #e60000; margin: 0 auto 15px; }
+        .login-card > p { color: #64748b; font-size: 14px; margin-bottom: 40px; }
+
+        /* Botões de Escolha */
+        .action-buttons { display: flex; gap: 20px; margin-bottom: 25px; }
+        
+        .btn-option {
+            flex: 1; border: 1px solid #e2e8f0; border-radius: 16px; padding: 30px 20px; text-decoration: none; color: #1e293b; transition: all 0.3s; display: flex; flex-direction: column; align-items: center; gap: 15px; background: white;
+        }
+        .btn-option:hover { border-color: #001a40; box-shadow: 0 10px 25px rgba(0,26,64,0.08); transform: translateY(-5px); }
+        
+        .btn-icon { width: 50px; height: 50px; border-radius: 50%; display: flex; justify-content: center; align-items: center; }
+        .btn-icon.blue { background: rgba(59, 130, 246, 0.1); color: #3b82f6; }
+        .btn-icon.red { background: rgba(230, 0, 0, 0.1); color: #e60000; }
+        
+        .btn-option h3 { font-size: 16px; font-weight: 700; }
+        .btn-option p { font-size: 12px; color: #64748b; line-height: 1.4; }
+
+        /* Botão Novo Site */
+        .btn-dashed {
+            display: flex; align-items: center; justify-content: center; gap: 10px; border: 2px dashed #cbd5e1; border-radius: 12px; padding: 18px; text-decoration: none; color: #3b82f6; font-size: 14px; font-weight: 600; transition: 0.3s; background: transparent;
+        }
+        .btn-dashed:hover { background: rgba(59, 130, 246, 0.05); border-color: #3b82f6; }
+        .btn-dashed p { font-size: 11px; color: #94a3b8; font-weight: 400; margin-top: 2px; }
+
+        /* Rodapé do Cartão */
+        .card-footer { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 40px; }
+        .footer-logo { font-size: 18px; font-weight: 900; letter-spacing: -1px; color: #001a40; }
+        .footer-logo .red { color: #e60000; }
+        .card-footer p { font-size: 11px; color: #94a3b8; }
+
+        /* Responsividade para Celulares */
+        @media (max-width: 900px) {
+            body { flex-direction: column; overflow: auto; }
+            .left-panel { width: 100%; clip-path: none; padding: 40px 20px; }
+            .right-panel { width: 100%; position: relative; height: auto; padding: 20px; }
+            .login-card { margin-left: 0; padding: 30px 20px; }
+            .action-buttons { flex-direction: column; }
+            .red-shape-bottom, .red-shape-top { display: none; } /* Esconde as formas no celular para não bugar a tela */
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="header-text">
-            <h3>- Bem-vindo ao -</h3>
-            <!-- Título Alterado -->
-            <h1>PAINEL DO<br><span>INVENTÁRIO</span></h1>
-            <p>Soluções inteligentes para uma logística mais eficiente e contagens precisas.</p>
+    <!-- Lado Azul -->
+    <div class="left-panel">
+        <div class="red-shape-top"></div>
+        <div class="red-shape-bottom"></div>
+
+        <div class="logo">
+            <div class="logo-main">cev<span class="red">A</span></div>
+            <div class="logo-sub">LOGISTICS</div>
         </div>
-        <div class="logo-container">
-            <!-- Puxando a imagem logo-ceva.png -->
-            <img src="logo-ceva.png" alt="CEVA Logistics">
+
+        <h1 class="hero-title">Sistema de<br><span class="highlight">Inventário</span></h1>
+        <p class="hero-subtitle">Controle, precisão e eficiência em cada etapa do seu inventário.</p>
+
+        <div class="features-list">
+            <div class="feature-item">
+                <div class="feature-icon"><span class="material-icons-outlined">assignment</span></div>
+                <div class="feature-text">
+                    <h4>Gestão Inteligente</h4>
+                    <p>Acompanhe e gerencie seu inventário<br>em tempo real.</p>
+                </div>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon"><span class="material-icons-outlined">bar_chart</span></div>
+                <div class="feature-text">
+                    <h4>Dados Confiáveis</h4>
+                    <p>Informações precisas para decisões<br>mais assertivas.</p>
+                </div>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon"><span class="material-icons-outlined">verified_user</span></div>
+                <div class="feature-text">
+                    <h4>Segurança Garantida</h4>
+                    <p>Seus dados protegidos com os mais<br>altos padrões de segurança.</p>
+                </div>
+            </div>
         </div>
-    </header>
-
-    <div class="cards-container">
-        
-        <!-- Cartão 1: Python -->
-        <a href="https://nvnjfcvjdmwwryttyp6q65.streamlit.app/" target="_blank" class="card planejamento">
-            <div class="card-icon">
-                <span class="material-icons-outlined">insert_chart_outlined</span>
-            </div>
-            <h2>Análise e<br>Planejamento</h2>
-            <p>Acesse as ferramentas de análise avançada, dashboards operacionais e validações construídas em Python.</p>
-            <div class="card-arrow"><span class="material-icons-outlined">arrow_forward</span></div>
-        </a>
-
-        <!-- Cartão 2: HTML -->
-        <a href="https://richardsilvatceva-bot.github.io/Flow/" target="_blank" class="card contagem">
-            <div class="card-icon">
-                <span class="material-icons-outlined">inventory_2</span>
-            </div>
-            <h2>Flow<br>Inventário</h2>
-            <p>Plataforma para gerenciamento de contagens físicas, execução de conferências e controle de itens divergentes.</p>
-            <div class="card-arrow"><span class="material-icons-outlined">arrow_forward</span></div>
-        </a>
-
     </div>
 
-    <footer>
-        <div class="footer-item"><span class="material-icons-outlined" style="font-size:16px;">verified_user</span> Visão de Ponta a Ponta</div>
-        <div class="footer-item"><span class="material-icons-outlined" style="font-size:16px;">security</span> Segurança de dados</div>
-        <div class="footer-item"><span class="material-icons-outlined" style="font-size:16px;">schedule</span> Informações em tempo real</div>
-    </footer>
+    <!-- Lado Branco -->
+    <div class="right-panel">
+        <div class="login-card">
+            
+            <div class="card-top-icon">
+                <span class="material-icons-outlined">warehouse</span>
+            </div>
+            
+            <h2>Qual site irá utilizar hoje?</h2>
+            <div class="divider"></div>
+            <p>Selecione o site de inventário que deseja acessar.</p>
+
+            <div class="action-buttons">
+                <!-- Botão 1: Link para o Streamlit (Python) -->
+                <a href="https://nvnjfcvjdmwwryttyp6q65.streamlit.app/" class="btn-option">
+                    <div class="btn-icon blue"><span class="material-icons-outlined">assignment</span></div>
+                    <div>
+                        <h3>Planejamento Cíclico</h3>
+                        <p>Planeje e acompanhe os ciclos de inventário.</p>
+                    </div>
+                </a>
+
+                <!-- Botão 2: Link para o Flow HTML (App) -->
+                <a href="https://richardsilvatceva-bot.github.io/Flow/" class="btn-option">
+                    <div class="btn-icon red"><span class="material-icons-outlined">inventory_2</span></div>
+                    <div>
+                        <h3>Contagens</h3>
+                        <p>Realize e gerencie contagens de inventário.</p>
+                    </div>
+                </a>
+            </div>
+
+            <a href="#" class="btn-dashed">
+                <span class="material-icons-outlined">add_circle_outline</span>
+                <div>
+                    Adicionar novo site de inventário
+                    <p>Cadastrar e acessar outro site</p>
+                </div>
+            </a>
+
+            <div class="card-footer">
+                <div class="footer-logo">cev<span class="red">A</span></div>
+                <p>© 2024 CEVA Logistics. Todos os direitos reservados.</p>
+            </div>
+
+        </div>
+    </div>
 
 </body>
 </html>
