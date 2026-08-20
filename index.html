@@ -236,7 +236,6 @@
             container.innerHTML = html;
         }
 
-        // Funções do Modal
         function abrirModal() {
             document.getElementById('modal-add').style.display = 'flex';
             document.getElementById('site-nome').value = '';
@@ -248,7 +247,6 @@
             document.getElementById('modal-add').style.display = 'none';
         }
 
-        // Função para Salvar o novo Site
         function salvarNovoSite() {
             const nome = document.getElementById('site-nome').value.trim();
             let link = document.getElementById('site-link').value.trim();
@@ -259,7 +257,6 @@
                 return;
             }
 
-            // Garante que o link comece com http
             if (!link.startsWith('http://') && !link.startsWith('https://')) {
                 link = 'https://' + link;
             }
@@ -274,13 +271,24 @@
             carregarBotoes();
         }
 
-        // Função para Excluir um Site Customizado
+        // --- SISTEMA DE EXCLUSÃO COM SENHA ---
         function excluirSite(index) {
-            if (confirm("Deseja realmente remover este atalho?")) {
-                const customSites = JSON.parse(localStorage.getItem('ceva_sites_customizados') || '[]');
-                customSites.splice(index, 1);
-                localStorage.setItem('ceva_sites_customizados', JSON.stringify(customSites));
-                carregarBotoes();
+            // Solicita a senha ao usuário
+            const senhaDigitada = prompt("Esta é uma área protegida.\nDigite a senha de administrador para excluir este atalho:");
+            
+            // Verifica se clicou em cancelar
+            if (senhaDigitada === null) return; 
+
+            // Verifica se a senha está correta
+            if (senhaDigitada === "14436192") {
+                if (confirm("Senha aceita! Tem certeza que deseja remover este botão?")) {
+                    const customSites = JSON.parse(localStorage.getItem('ceva_sites_customizados') || '[]');
+                    customSites.splice(index, 1); // Remove o item
+                    localStorage.setItem('ceva_sites_customizados', JSON.stringify(customSites));
+                    carregarBotoes(); // Atualiza a tela
+                }
+            } else {
+                alert("Senha incorreta! A exclusão foi cancelada.");
             }
         }
 
