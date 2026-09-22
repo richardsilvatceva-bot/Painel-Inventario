@@ -244,7 +244,7 @@
             const container = document.getElementById('container-botoes');
             const customSites = JSON.parse(localStorage.getItem('ceva_sites_customizados') || '[]');
 
-            // Botões Fixos (Sempre aparecem primeiro)
+            // Botões Fixos (Sempre aparecem primeiro para todos os usuários)
             let html = `
                 <a href="https://nvnjfcvjdmwwryttyp6q65.streamlit.app/" target="_blank" class="btn-option">
                     <div class="btn-icon blue"><span class="material-icons-outlined">assignment</span></div>
@@ -260,9 +260,23 @@
                         <p>Realize e gerencie contagens de inventário.</p>
                     </div>
                 </a>
+                <a href="https://richardsilvatceva-bot.github.io/dashboard-cd-master/" target="_blank" class="btn-option">
+                    <div class="btn-icon blue"><span class="material-icons-outlined">dashboard</span></div>
+                    <div>
+                        <h3>Dashboard CD Master</h3>
+                        <p>Acesse as métricas e painel principal do CD.</p>
+                    </div>
+                </a>
+                <a href="https://richardribeiro428-lang.github.io/sistema-resgate/" target="_blank" class="btn-option">
+                    <div class="btn-icon gray"><span class="material-icons-outlined">autorenew</span></div>
+                    <div>
+                        <h3>Sistema de Resgate</h3>
+                        <p>Acesse a plataforma de gestão de resgates.</p>
+                    </div>
+                </a>
             `;
 
-            // Adiciona os botões personalizados
+            // Adiciona os botões personalizados salvos localmente
             customSites.forEach((site, index) => {
                 html += `
                     <div style="position: relative; height: 100%;">
@@ -285,7 +299,6 @@
 
         function abrirModal() {
             const modal = document.getElementById('modal-add');
-            // Adiciona a classe 'show' que contém a animação definida no CSS
             modal.classList.add('show');
             document.getElementById('site-nome').value = '';
             document.getElementById('site-link').value = '';
@@ -295,11 +308,9 @@
         function fecharModal() {
             const modal = document.getElementById('modal-add');
             modal.classList.remove('show');
-            
-            // Dá um tempo bem curtinho para finalizar a animação do css (caso a gente crie uma de saída no futuro)
             setTimeout(() => {
                 modal.style.display = 'none';
-            }, 50); // Esvazia o display depois do clique
+            }, 50);
         }
 
         function salvarNovoSite() {
@@ -326,24 +337,18 @@
             carregarBotoes();
         }
 
-        // --- SISTEMA DE EXCLUSÃO COM SENHA ---
         function excluirSite(index) {
-            // Previne que clicar no botão "X" abra o link do botão
             event.preventDefault();
             
-            // Solicita a senha ao usuário
             const senhaDigitada = prompt("Esta é uma área protegida.\nDigite a senha de administrador para excluir este atalho:");
-            
-            // Verifica se clicou em cancelar
             if (senhaDigitada === null) return; 
 
-            // Verifica se a senha está correta
             if (senhaDigitada === "14436192") {
                 if (confirm("Senha aceita! Tem certeza que deseja remover este botão?")) {
                     const customSites = JSON.parse(localStorage.getItem('ceva_sites_customizados') || '[]');
-                    customSites.splice(index, 1); // Remove o item
+                    customSites.splice(index, 1); 
                     localStorage.setItem('ceva_sites_customizados', JSON.stringify(customSites));
-                    carregarBotoes(); // Atualiza a tela instantaneamente
+                    carregarBotoes(); 
                 }
             } else {
                 alert("Senha incorreta! A exclusão foi cancelada.");
