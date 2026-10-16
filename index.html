@@ -45,6 +45,7 @@
             clip-path: polygon(0 0, 100% 0, 85% 100%, 0% 100%);
             z-index: 2;
             animation: slideInLeft 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+            transition: all 0.4s ease;
         }
 
         .red-shape-bottom {
@@ -56,8 +57,8 @@
             animation: fadeIn 1.5s ease 0.8s forwards; opacity: 0;
         }
 
-        .logo-img { height: 55px; object-fit: contain; margin-bottom: 60px; align-self: flex-start; opacity: 0; animation: fadeSlideUp 0.8s ease 0.2s forwards; }
-        .hero-title { font-size: 48px; font-weight: 800; line-height: 1.1; margin-bottom: 15px; opacity: 0; animation: fadeSlideUp 0.8s ease 0.4s forwards; }
+        .logo-img { height: 55px; object-fit: contain; margin-bottom: 60px; align-self: flex-start; opacity: 0; animation: fadeSlideUp 0.8s ease 0.2s forwards; transition: all 0.3s ease; }
+        .hero-title { font-size: 48px; font-weight: 800; line-height: 1.1; margin-bottom: 15px; opacity: 0; animation: fadeSlideUp 0.8s ease 0.4s forwards; transition: all 0.3s ease; }
         .hero-title .highlight { color: #e60000; }
         .hero-subtitle { font-size: 16px; color: #94a3b8; margin-bottom: 50px; max-width: 80%; line-height: 1.5; opacity: 0; animation: fadeSlideUp 0.8s ease 0.5s forwards; }
 
@@ -68,6 +69,24 @@
         .feature-item:hover .feature-icon { background: rgba(255,255,255,0.1); border-color: transparent; color: white; }
         .feature-text h4 { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
         .feature-text p { font-size: 13px; color: #94a3b8; line-height: 1.4; }
+
+        /* Botão Mobile Toggle */
+        .mobile-toggle-btn {
+            display: none; /* Escondido no PC */
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 10;
+            transition: background 0.3s ease;
+        }
+        .mobile-toggle-btn:hover { background: rgba(255, 255, 255, 0.2); }
 
         /* --- LADO DIREITO (BRANCO) --- */
         .right-panel {
@@ -120,16 +139,12 @@
         /* MODAL (Nova Janela) com Transição Suave */
         .modal-overlay { 
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 26, 64, 0.8); display: none; justify-content: center; align-items: center; z-index: 3000; padding: 20px; 
-            opacity: 0; /* Inicia transparente */
-            transition: opacity 0.3s ease; /* Efeito Fade do fundo escuro */
+            opacity: 0; transition: opacity 0.3s ease; 
         }
-        
-        /* Classe ativada via JS para fazer o fundo aparecer */
         .modal-overlay.show { opacity: 1; display: flex; animation: fadeIn 0.3s forwards; }
 
         .modal-content { 
             background: white; padding: 30px; border-radius: 16px; width: 100%; max-width: 450px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); text-align: left; 
-            /* Animação do PopUp pulando na tela */
             animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
 
@@ -150,22 +165,38 @@
         .btn-pri { background: #e60000; color: white; }
         .btn-pri:hover { background: #cc0000; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(230,0,0,0.2); }
 
-        /* Excluir Card Customizado */
         .btn-delete-card { position: absolute; top: 10px; right: 10px; background: none; border: none; color: #cbd5e1; cursor: pointer; padding: 5px; border-radius: 50%; display: flex; justify-content: center; align-items: center; transition: all 0.2s ease; z-index: 10; }
         .btn-delete-card:hover { color: #e60000; background: #fee2e2; transform: scale(1.1); }
 
+        /* --- RESPONSIVIDADE PARA CELULAR --- */
         @media (max-width: 900px) {
             body { flex-direction: column; overflow: auto; }
             .left-panel { width: 100%; clip-path: none; padding: 40px 20px; animation: slideInLeft 0.8s ease forwards; }
             .right-panel { width: 100%; position: relative; height: auto; padding: 20px; animation: slideInRight 0.8s ease forwards; }
             .login-card { margin-left: 0; padding: 30px 20px; max-width: 100%; }
             .red-shape-bottom, .red-shape-top { display: none; } 
+            
+            /* Lógica do botão de colapso mobile */
+            .mobile-toggle-btn { display: flex; justify-content: center; align-items: center; }
+            
+            /* Estado Recolhido */
+            .left-panel.collapsed { padding: 25px 20px; }
+            .left-panel.collapsed .hero-subtitle,
+            .left-panel.collapsed .features-list { display: none; }
+            .left-panel.collapsed .logo-img { margin-bottom: 10px; height: 40px; }
+            .left-panel.collapsed .hero-title { font-size: 28px; margin-bottom: 0; }
         }
     </style>
 </head>
 <body>
 
-    <div class="left-panel">
+    <!-- Lado Esquerdo com o novo ID e Botão -->
+    <div class="left-panel collapsed" id="leftPanel">
+        <!-- O painel já inicia recolhido (collapsed) na versão mobile para priorizar os botões -->
+        <button class="mobile-toggle-btn" onclick="toggleMobilePanel()" id="toggleBtn">
+            <span class="material-icons-outlined">expand_more</span>
+        </button>
+
         <div class="red-shape-top"></div>
         <div class="red-shape-bottom"></div>
         <img src="Ceva.png" alt="CEVA Logistics" class="logo-img">
@@ -196,12 +227,10 @@
             <div class="divider"></div>
             <p>Selecione o site de inventário que deseja acessar.</p>
 
-            <!-- Container onde os botões serão injetados pelo JavaScript -->
             <div class="action-buttons" id="container-botoes">
-                <!-- Botões padrão entram aqui via JS -->
+                <!-- Botões gerados via JS -->
             </div>
 
-            <!-- Botão de Adicionar Modal -->
             <button class="btn-dashed" onclick="abrirModal()">
                 <span class="material-icons-outlined">add_circle_outline</span>
                 <div style="text-align: left;">
@@ -212,7 +241,7 @@
         </div>
     </div>
 
-    <!-- Modal para Adicionar Novo Site -->
+    <!-- Modal Adicionar Site -->
     <div class="modal-overlay" id="modal-add">
         <div class="modal-content">
             <div class="modal-header">
@@ -239,12 +268,29 @@
     </div>
 
     <script>
-        // Função para carregar os botões na tela
+        // Função para minimizar/expandir o painel no mobile
+        function toggleMobilePanel() {
+            const panel = document.getElementById('leftPanel');
+            const icon = document.querySelector('#toggleBtn .material-icons-outlined');
+            
+            panel.classList.toggle('collapsed');
+            
+            if (panel.classList.contains('collapsed')) {
+                icon.textContent = 'expand_more'; // Seta pra baixo indicando que pode expandir
+            } else {
+                icon.textContent = 'expand_less'; // Seta pra cima indicando que pode recolher
+            }
+        }
+
+        // Remove a classe collapsed ao carregar no Desktop por segurança
+        if (window.innerWidth > 900) {
+            document.getElementById('leftPanel').classList.remove('collapsed');
+        }
+
         function carregarBotoes() {
             const container = document.getElementById('container-botoes');
             const customSites = JSON.parse(localStorage.getItem('ceva_sites_customizados') || '[]');
 
-            // Botões Fixos (Sempre aparecem primeiro para todos os usuários)
             let html = `
                 <a href="https://nvnjfcvjdmwwryttyp6q65.streamlit.app/" target="_blank" class="btn-option">
                     <div class="btn-icon blue"><span class="material-icons-outlined">assignment</span></div>
@@ -287,7 +333,6 @@
                 </a>
             `;
 
-            // Adiciona os botões personalizados salvos localmente
             customSites.forEach((site, index) => {
                 html += `
                     <div style="position: relative; height: 100%;">
@@ -366,7 +411,6 @@
             }
         }
 
-        // Inicia carregando os botões quando a página abre
         carregarBotoes();
     </script>
 </body>
